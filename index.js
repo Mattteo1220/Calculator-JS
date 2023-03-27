@@ -1,12 +1,7 @@
-import Calculator from "./Calculator.js";
+import {Calculator} from "./Calculator.js";
 
-const OperatorType = {
-    "Sum" : 1,
-    "Minus" : 2,
-    "Times" : 3,
-    "Divide" : 4
-}
-
+let calculator = new Calculator(0, 0);
+let operations = new Array();
 const ac = document.getElementById("clear");
 const screen = document.getElementById("screen");
 const options = document.body.getElementsByClassName("option");
@@ -14,8 +9,8 @@ const operators = document.body.getElementsByClassName("operator");
 const equals = document.getElementById("equals");
 let isOperatorSet = false;
 let operator = "";
-let firstArgument = 0;
-let secondArgument = 0;
+let firstArgument = -1;
+let secondArgument = -1;
 
 function clearScreen(){
     screen.innerHTML = "0";
@@ -24,29 +19,35 @@ function clearScreen(){
 ac.addEventListener("click", clearScreen);
 
 equals.addEventListener("click", () => {
-    let result = 0;
-    switch(parseInt(operator)){
-        case OperatorType.Sum:
-            result = Calculator.sum(firstArgument, secondArgument);
-            break;
-        case OperatorType.Minus:
-            result = Calculator.minus(firstArgument, secondArgument);
-            break;
-        case OperatorType.Times:
-            result = Calculator.product(firstArgument, secondArgument);
-            break;
-        case OperatorType.Divide:
-            result = Calculator.remainder(firstArgument, secondArgument);
-            break;
-    }
+    calculator.arg1 = firstArgument;
+    calculator.arg2 = secondArgument;
+    let result = fetchResult();
 
     screen.innerHTML = result;
 });
 
+
+function fetchResult(){
+    switch(parseInt(operator)){
+        case Calculator.OperatorType.Sum:
+            return calculator.sum();
+        case Calculator.OperatorType.Minus:
+            return calculator.minus();
+        case Calculator.OperatorType.Times:
+            return calculator.times();
+        case Calculator.OperatorType.Divide:
+            return calculator.divide();
+    }
+}
 Array.from(options).forEach(o => o.addEventListener("click", () => {
    
     if(screen.innerHTML === "0"){
         screen.innerHTML = o.innerHTML;
+    }
+    else if(isOperatorSet && firstArgument !== -1 && secondArgument !== -1){
+        calculator.accumulator = fetchResult();
+        screen.innerHTML = o.innerHTML;
+        firstArgument = parseInt(screen.innerHTML);
     }
     else if(isOperatorSet){
         screen.innerHTML = o.innerHTML;
@@ -70,11 +71,3 @@ Array.from(operators).forEach(o => o.addEventListener("click", () => {
     isOperatorSet = true;
 
 }));
-
-
-
-
-
-export default {
-    screen
-}

@@ -1,14 +1,16 @@
-let assert = require("assert");
-const Calculator = require("../../Calculator.js");
+import assert from "assert";
+import {Calculator} from "../../Calculator.js";
 
 describe("Calculator", () => {
     describe(".Sum", () => {
         it("returns sum of numbers", () => {
+            
             let expected = 3;
             let argument1 = 1;
             let argument2 = 2;
+            let calculator = new Calculator(argument1, argument2);
 
-            var actual = Calculator.sum(argument1, argument2);
+            var actual = calculator.sum();
 
             assert.strictEqual(actual, expected);
         });
@@ -19,8 +21,9 @@ describe("Calculator", () => {
             let expected = 2;
             let argument1 = 6;
             let argument2 = 4;
+            let calculator = new Calculator(argument1, argument2);
 
-            var actual = Calculator.minus(argument1, argument2);
+            var actual = calculator.minus(argument1, argument2);
 
             assert.strictEqual(actual, expected);
         });
@@ -31,8 +34,9 @@ describe("Calculator", () => {
             let expected = 10;
             let argument1 = 2;
             let argument2 = 5;
+            let calculator = new Calculator(argument1, argument2);
 
-            let actual = Calculator.product(argument1, argument2);
+            let actual = calculator.times(argument1, argument2);
 
             assert.strictEqual(actual ,expected);
         });
@@ -43,8 +47,9 @@ describe("Calculator", () => {
             let expected = 2;
             let argument1 = 10;
             let argument2 = 5;
+            let calculator = new Calculator(argument1, argument2);
 
-            let actual = Calculator.remainder(argument1, argument2);
+            let actual = calculator.divide(argument1, argument2);
 
             assert.strictEqual(actual, expected);
         });
@@ -53,7 +58,8 @@ describe("Calculator", () => {
             let expected = new Error("You cannot divide by zero.");
             let argument1 = 2;
             let argument2 = 0;
-            assert.throws(() => Calculator.remainder(argument1, argument2), expected);
+            let calculator = new Calculator(argument1, argument2);
+            assert.throws(() => calculator.divide(argument1, argument2), expected);
         });
     });
 });
