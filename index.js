@@ -1,62 +1,65 @@
 import {Calculator} from "./Calculator.js";
+import {OperatorType} from "./OperatorType.js";
 
-let calculator = new Calculator(0, 0);
-let operations = new Array();
+let calculator = new Calculator();
 const ac = document.getElementById("clear");
 const screen = document.getElementById("screen");
 const options = document.body.getElementsByClassName("option");
 const operators = document.body.getElementsByClassName("operator");
 const equals = document.getElementById("equals");
-let isOperatorSet = false;
-let operator = "";
-let firstArgument = -1;
-let secondArgument = -1;
 
 function clearScreen(){
-    screen.innerHTML = "0";
+    calculator.accumulator = 0;
+    calculator.screen = "0";
+    calculator.operator = OperatorType.None;
+    setScreen();
 }
 
 ac.addEventListener("click", clearScreen);
 
 equals.addEventListener("click", () => {
-    calculator.arg1 = firstArgument;
-    calculator.arg2 = secondArgument;
-    let result = fetchResult();
-
-    screen.innerHTML = result;
+    calculator.accumulator = fetchResult();
+    setScreen();
+    calculator.accumulator = 0;
+    calculator.operator = OperatorType.None;
+    calculator.arg1 = 0;
+    calculator.arg2 = 0;
 });
 
-
 function fetchResult(){
-    switch(parseInt(operator)){
-        case Calculator.OperatorType.Sum:
+    switch(calculator.operator){
+        case OperatorType.Sum:
             return calculator.sum();
-        case Calculator.OperatorType.Minus:
+        case OperatorType.Minus:
             return calculator.minus();
-        case Calculator.OperatorType.Times:
+        case OperatorType.Times:
             return calculator.times();
-        case Calculator.OperatorType.Divide:
+        case OperatorType.Divide:
             return calculator.divide();
+        default:
+            throw new Error("No operator was selected.");
     }
 }
 Array.from(options).forEach(o => o.addEventListener("click", () => {
    
-    if(screen.innerHTML === "0"){
-        screen.innerHTML = o.innerHTML;
+    if(calculator.screen === "0"){
+        calculator.screen = o.innerHTML;
+        setScreen();
     }
-    else if(isOperatorSet && firstArgument !== -1 && secondArgument !== -1){
+    else if(calculator.operator != OperatorType.None && calculator.arg1 !== -1 && calculator.arg2 !== -1){
         calculator.accumulator = fetchResult();
-        screen.innerHTML = o.innerHTML;
-        firstArgument = parseInt(screen.innerHTML);
+        calculator.arg1 = parseInt(o.innerHTML);
+        setScreen();
     }
-    else if(isOperatorSet){
-        screen.innerHTML = o.innerHTML;
-        secondArgument = parseInt( screen.innerHTML);
-        console.log(`secondArgument: ${secondArgument}`);
-        isOperatorSet = false;
+    else if(calculator.operator != OperatorType.None){
+        calculator.arg2 = parseInt( o.innerHTML);
+        console.log(`secondArgument: ${calculator.arg2}`);
+        setScreen();
     }
     else{
-        screen.innerHTML += o.innerHTML;
+        calculator.arg1 = parseInt(o.innerHTML);
+        calculator.screen += o.innerHTML;
+        setScreen();
     }
 
 }));
@@ -64,10 +67,27 @@ Array.from(options).forEach(o => o.addEventListener("click", () => {
 
 Array.from(operators).forEach(o => o.addEventListener("click", () => {
 
-    firstArgument = parseInt(screen.innerHTML);
-    console.log(`First argument: ${firstArgument}`);
+    calculator.arg1 = parseInt(screen.innerHTML);
+    console.log(`First argument: ${calculator.arg1}`);
 
-    operator = o.dataset.operator;
-    isOperatorSet = true;
-
+    switch(parseInt(o.getAttribute("data-operator"))){
+        case OperatorType.Sum:
+            calculator.operator = OperatorType.Sum;
+            break;
+        case OperatorType.Minus:
+            calculator.operator = OperatorType.Minus;
+            break;
+        case OperatorType.Times:
+            calculator.operator = OperatorType.Times;
+            break;
+        case OperatorType.Divide:
+            calculator.operator = OperatorType.Divide;
+            break;
+        default:
+            throw new Error("No operator was selected.");
+    }
 }));
+
+function setScreen(){
+    screen.innerHTML = calculator.accumulator !== 0 ? calculator.accumulator : calculator.screen;
+}

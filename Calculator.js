@@ -1,15 +1,20 @@
+import {OperatorType} from "./OperatorType.js";
+
 class Calculator{
-    constructor(arg1, arg2){
+    constructor(arg1 = -1, arg2 = -1){
         this._arg1 = arg1;
         this._arg2 = arg2;
         this._accumulator = 0;
+        this._screen = "0";
+        this._operator = OperatorType.None;
     }
 
-    static OperatorType = {
-        "Sum" : 1,
-        "Minus" : 2,
-        "Times" : 3,
-        "Divide" : 4
+    get screen(){
+        return this._screen;
+    }
+
+    set screen(val){
+        this._screen = val;
     }
 
     get arg1(){
@@ -34,6 +39,14 @@ class Calculator{
 
     set accumulator(acc){
         this._accumulator = acc;
+    }
+
+    get operator(){
+        return this._operator;
+    }
+
+    set operator(val){
+        this._operator = val;
     }
 
     sum(){
