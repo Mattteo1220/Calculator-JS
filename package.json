@@ -3,6 +3,9 @@
     "mocha": "^10.2.0"
   },
   "scripts": {
-    "test" : "mocha Resources/tests/*.js"
+    "test": "mocha Resources/tests/*.js"
+  },
+  "dependencies": {
+    "node": "^19.8.1"
   }
 }

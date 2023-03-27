@@ -1,5 +1,5 @@
 let assert = require("assert");
-let index = require("../../index");
+let index = require("../../index").default;
 
 // describe("Index", () => {
 //     describe("changeScreenText", () => {

@@ -7,7 +7,7 @@
         <meta name="KeyWords" content="HTML, CSS, Grid, Javascript, JS, Js, Cascading Style Sheet">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="./main.css"  type="text/css" rel="stylesheet">
-        <script type="text/javascript" src="./index.js" defer></script>
+        <script type="module" src="./index.js" defer></script>
     </head>
     <body>
 
@@ -28,13 +28,14 @@
                     <button class="option-grid-item option">1</button>
                     <button class="option-grid-item option">0</button>
                     <button class="option-grid-item option">.</button>   
-                    <button class="option-grid-item option" id="equals">&equals;</button> 
+                    <button class="option-grid-item operator" id="equals">&equals;</button> 
                 </section>
                 <section class="grid-item operator-container">
-                    <button class="operator-grid-item operator">&div;</button>
-                    <button class="operator-grid-item operator">&times;</button>
-                    <button class="operator-grid-item operator">&minus;</button>
-                    <button class="operator-grid-item operator">&plus;</button>
+                    <button class="operator-grid-item operator" id="clear">AC</button>
+                    <button data-operator = "4" class="operator-grid-item operator">&div;</button>
+                    <button data-operator = "3" class="operator-grid-item operator">&times;</button>
+                    <button data-operator = "2" class="operator-grid-item operator">&minus;</button>
+                    <button data-operator = "1" class="operator-grid-item operator">&plus;</button>
 
                      
                 </section> 
