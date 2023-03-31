@@ -8,22 +8,17 @@ const options = document.body.getElementsByClassName("option");
 const operators = document.body.getElementsByClassName("operator");
 const equals = document.getElementById("equals");
 
-function clearScreen(){
-    calculator.accumulator = 0;
-    calculator.screen = "0";
-    calculator.operator = OperatorType.None;
+function allClear(){
+    calculator.allClear();
     setScreen();
 }
 
-ac.addEventListener("click", clearScreen);
+ac.addEventListener("click", allClear);
 
 equals.addEventListener("click", () => {
     calculator.accumulator = fetchResult();
     setScreen();
-    calculator.accumulator = 0;
-    calculator.operator = OperatorType.None;
-    calculator.arg1 = 0;
-    calculator.arg2 = 0;
+    calculator.reset();
 });
 
 function fetchResult(){
@@ -42,33 +37,34 @@ function fetchResult(){
 }
 Array.from(options).forEach(o => o.addEventListener("click", () => {
    
-    if(calculator.screen === "0"){
-        calculator.screen = o.innerHTML;
-        setScreen();
-    }
-    else if(calculator.operator != OperatorType.None && calculator.arg1 !== -1 && calculator.arg2 !== -1){
-        calculator.accumulator = fetchResult();
+    calculator.screen = o.innerHTML;
+    
+    if(calculator.operator == OperatorType.None && calculator.arg1 === -1){
         calculator.arg1 = parseInt(o.innerHTML);
-        setScreen();
     }
-    else if(calculator.operator != OperatorType.None){
+    else if(calculator.operator !== OperatorType.None && calculator.arg1 === -1){
+        calculator.arg1 = parseInt(o.innerHTML);
+        calculator.accumulator = fetchResult();
+    }
+    else if(calculator.operator !== OperatorType.None && calculator.arg2 === -1){
         calculator.arg2 = parseInt( o.innerHTML);
-        console.log(`secondArgument: ${calculator.arg2}`);
-        setScreen();
+        calculator.screen = o.innerHTML;
+    }
+    else if(calculator.operator !== OperatorType.None && calculator.arg2 === -1){
+        calculator.arg2 = parseInt(o.innerHTML);
+        calculator.accumulator = fetchResult();
     }
     else{
-        calculator.arg1 = parseInt(o.innerHTML);
-        calculator.screen += o.innerHTML;
-        setScreen();
+        calculator.arg1 = -1;
+        calculator.arg2 = -1;
     }
+
+    setScreen();
 
 }));
 
 
 Array.from(operators).forEach(o => o.addEventListener("click", () => {
-
-    calculator.arg1 = parseInt(screen.innerHTML);
-    console.log(`First argument: ${calculator.arg1}`);
 
     switch(parseInt(o.getAttribute("data-operator"))){
         case OperatorType.Sum:
@@ -84,8 +80,9 @@ Array.from(operators).forEach(o => o.addEventListener("click", () => {
             calculator.operator = OperatorType.Divide;
             break;
         default:
-            throw new Error("No operator was selected.");
+            calculator.operator = OperatorType.None;
     }
+
 }));
 
 function setScreen(){
