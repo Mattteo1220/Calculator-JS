@@ -36,28 +36,11 @@ function fetchResult(){
     }
 }
 Array.from(options).forEach(o => o.addEventListener("click", () => {
-   
-    calculator.screen = o.innerHTML;
-    
-    if(calculator.operator == OperatorType.None && calculator.arg1 === -1){
-        calculator.arg1 = parseInt(o.innerHTML);
+    if(calculator.screen === "0"){
+        calculator.screen = "";
     }
-    else if(calculator.operator !== OperatorType.None && calculator.arg1 === -1){
-        calculator.arg1 = parseInt(o.innerHTML);
-        calculator.accumulator = fetchResult();
-    }
-    else if(calculator.operator !== OperatorType.None && calculator.arg2 === -1){
-        calculator.arg2 = parseInt( o.innerHTML);
-        calculator.screen = o.innerHTML;
-    }
-    else if(calculator.operator !== OperatorType.None && calculator.arg2 === -1){
-        calculator.arg2 = parseInt(o.innerHTML);
-        calculator.accumulator = fetchResult();
-    }
-    else{
-        calculator.arg1 = -1;
-        calculator.arg2 = -1;
-    }
+    calculator.screen += `${o.value}`;
+    calculator.addArgument(parseInt(o.value));
 
     setScreen();
 
@@ -69,22 +52,29 @@ Array.from(operators).forEach(o => o.addEventListener("click", () => {
     switch(parseInt(o.getAttribute("data-operator"))){
         case OperatorType.Sum:
             calculator.operator = OperatorType.Sum;
+            calculator.screen += " + ";
             break;
         case OperatorType.Minus:
             calculator.operator = OperatorType.Minus;
+            calculator.screen += " - ";
             break;
         case OperatorType.Times:
             calculator.operator = OperatorType.Times;
+            calculator.screen += " * ";
             break;
         case OperatorType.Divide:
             calculator.operator = OperatorType.Divide;
+            calculator.screen += " / ";
             break;
         default:
             calculator.operator = OperatorType.None;
     }
 
+    setScreen();
+
 }));
 
 function setScreen(){
-    screen.innerHTML = calculator.accumulator !== 0 ? calculator.accumulator : calculator.screen;
+    screen.innerHTML = (calculator.accumulator !== 0 && calculator.operator == OperatorType.None) ? 
+    calculator.accumulator : calculator.screen;
 }

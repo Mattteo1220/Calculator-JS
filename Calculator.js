@@ -1,12 +1,19 @@
 import {OperatorType} from "./OperatorType.js";
 
 class Calculator{
-    constructor(arg1 = -1, arg2 = -1){
-        this._arg1 = arg1;
-        this._arg2 = arg2;
-        this._accumulator = 0;
+    constructor(){
+        this._arguments = new Array();
         this._screen = "0";
         this._operator = OperatorType.None;
+        this._accumulator = 0;
+    }
+
+    get accumulator(){
+        return this._accumulator;
+    }
+
+    set accumulator(val){
+        this._accumulator = val;
     }
 
     get screen(){
@@ -17,28 +24,12 @@ class Calculator{
         this._screen = val;
     }
 
-    get arg1(){
-        return this._arg1;
+    get arguments(){
+        return this._arguments;
     }
 
-    set arg1(argument1){
-        this._arg1 = argument1;
-    }
-
-    get arg2(){
-        return this._arg2;
-    }
-
-    set arg2(argument2){
-        this._arg2 = argument2;
-    }
-
-    get accumulator(){
-        return this._accumulator;
-    }
-
-    set accumulator(acc){
-        this._accumulator = acc;
+    set arguments(arg){
+        this._arguments = arg;
     }
 
     get operator(){
@@ -49,37 +40,41 @@ class Calculator{
         this._operator = val;
     }
 
+    addArgument(arg){
+        this._arguments.push(arg);
+    } 
+
     allClear(){
-        this._arg1 = -1;
-        this._arg2 = -1;
+        this._arguments = new Array();
         this._operator = OperatorType.None;
         this._screen = "0";
         this._accumulator = 0;
     }
 
     reset(){
-        this.arg1 = -1;
-        this.arg2 = -1;
-        this.operator = OperatorType.None
+        this.arguments = [this._accumulator];
+        this.operator = OperatorType.None;
+        this.accumulator = this._accumulator !== 0 ? this._accumulator : 0;
+        this.screen = this._accumulator !== 0 ? this._accumulator : 0;
     }
 
     sum(){
-        return ((this.arg1 !== -1 ? this.arg1 : this.accumulator) + (this.arg2 !== -1 ? this.arg2 : this.accumulator));
+        return this.arguments.reduce((acc, val) => acc + val, 0);
     }
 
     minus(){
-        return ((this.arg1 !== -1 ? this.arg1 : this.accumulator) - (this.arg2 !== -1 ? this.arg2 : this.accumulator));
+        return this.arguments.reduce((acc, val) => acc - val, acc);
     }
 
     times(){
-        return ((this.arg1 !== -1 ? this.arg1 : this.accumulator) * (this.arg2 !== -1 ? this.arg2 : this.accumulator));
+        return this.arguments.reduce((acc, val) => acc * val, 0);
     }
 
     divide(){
         if(this.arg1 === 0 || this.arg2 === 0){
             throw new Error("You cannot divide by zero.");
         }
-        return ((this.arg1 !== -1 ? this.arg1 : this.accumulator) / (this.arg2 !== -1 ? this.arg2 : this.accumulator));
+        return this.arguments.reduce((acc, val) => acc / val, acc);
     }
 }
 
