@@ -16,7 +16,10 @@ function allClear(){
 ac.addEventListener("click", allClear);
 
 equals.addEventListener("click", () => {
-    calculator.accumulator = fetchResult();
+    let value1 = screen.innerHTML.split(/[+,-,*,\/]/)[0].trim();
+    let value2 = screen.innerHTML.split(/[+,-,*,\/]/)[1].trim();
+    calculator.arguments = [parseInt(value1), parseInt(value2)];
+    calculator.screen = fetchResult();
     setScreen();
     calculator.reset();
 });
@@ -40,7 +43,6 @@ Array.from(options).forEach(o => o.addEventListener("click", () => {
         calculator.screen = "";
     }
     calculator.screen += `${o.value}`;
-    calculator.addArgument(parseInt(o.value));
 
     setScreen();
 
@@ -75,6 +77,5 @@ Array.from(operators).forEach(o => o.addEventListener("click", () => {
 }));
 
 function setScreen(){
-    screen.innerHTML = (calculator.accumulator !== 0 && calculator.operator == OperatorType.None) ? 
-    calculator.accumulator : calculator.screen;
+    screen.innerHTML = calculator.screen;
 }

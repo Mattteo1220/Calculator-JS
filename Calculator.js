@@ -5,15 +5,6 @@ class Calculator{
         this._arguments = new Array();
         this._screen = "0";
         this._operator = OperatorType.None;
-        this._accumulator = 0;
-    }
-
-    get accumulator(){
-        return this._accumulator;
-    }
-
-    set accumulator(val){
-        this._accumulator = val;
     }
 
     get screen(){
@@ -40,10 +31,6 @@ class Calculator{
         this._operator = val;
     }
 
-    addArgument(arg){
-        this._arguments.push(arg);
-    } 
-
     allClear(){
         this._arguments = new Array();
         this._operator = OperatorType.None;
@@ -54,8 +41,6 @@ class Calculator{
     reset(){
         this.arguments = [this._accumulator];
         this.operator = OperatorType.None;
-        this.accumulator = this._accumulator !== 0 ? this._accumulator : 0;
-        this.screen = this._accumulator !== 0 ? this._accumulator : 0;
     }
 
     sum(){
@@ -63,18 +48,19 @@ class Calculator{
     }
 
     minus(){
-        return this.arguments.reduce((acc, val) => acc - val, acc);
+        let result = this.arguments[0] - this.arguments[1];
+        return result;
     }
 
     times(){
-        return this.arguments.reduce((acc, val) => acc * val, 0);
+        return this.arguments[0] * this.arguments[1];
     }
 
     divide(){
         if(this.arg1 === 0 || this.arg2 === 0){
             throw new Error("You cannot divide by zero.");
         }
-        return this.arguments.reduce((acc, val) => acc / val, acc);
+        return this.arguments[0] / this.arguments[1];
     }
 }
 
