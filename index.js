@@ -16,8 +16,8 @@ function allClear(){
 ac.addEventListener("click", allClear);
 
 equals.addEventListener("click", () => {
-    let value1 = screen.innerHTML.split(/[+,-,*,\/]/)[0].trim();
-    let value2 = screen.innerHTML.split(/[+,-,*,\/]/)[1].trim();
+    let value1 = screen.innerHTML.split(/[+,\-,*,\/]/)[0].trim();
+    let value2 = screen.innerHTML.split(/[+,\-,*,\/]/)[1].trim();
     calculator.arguments = [parseInt(value1), parseInt(value2)];
     calculator.screen = fetchResult();
     setScreen();
